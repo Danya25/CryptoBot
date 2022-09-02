@@ -1,5 +1,6 @@
 ﻿using CoinGecko.Clients;
 using CoinGecko.Entities.Response.Simple;
+using CoinGecko.Interfaces;
 using CryptoBot.Models;
 using CryptoBot.Utils;
 
@@ -7,23 +8,37 @@ namespace CryptoBot.Crypto.Services
 {
     public class CryptoCurrencyService : ICryptoCurrencyService
     {
-        private HttpClient _httpClient;
-        public CryptoCurrencyService(HttpClient httpClient)
+        private ISimpleClient _simpleClient;
+        private IPingClient _pingClient;
+        private ICoinsClient _coinsClient;
+        public CryptoCurrencyService(ISimpleClient simpleClient, IPingClient pingClient, ICoinsClient coinsClient)
         {
-            _httpClient = httpClient;
+            _simpleClient = simpleClient;
+            _pingClient = pingClient;
+            _coinsClient = coinsClient;
         }
         public async Task<List<CryptoToken>> GetTokenPrice(string[] tokensId, string[] currencies)
         {
-            var pingClient = new PingClient(_httpClient, JsonSerializer.GetSerializerSettings());
-            var simpleClient = new SimpleClient(_httpClient, JsonSerializer.GetSerializerSettings());
-
-            if ((await pingClient.GetPingAsync()).GeckoSays == string.Empty)
+            if ((await _pingClient.GetPingAsync()).GeckoSays == string.Empty)
                 return new List<CryptoToken>(0);
 
-            var simplePrice = await simpleClient.GetSimplePrice(tokensId, currencies);
+            var simplePrice = await _simpleClient.GetSimplePrice(tokensId, currencies);
             var parsedPrice = ParseCryptoToken(simplePrice);
 
             return parsedPrice;
+        }
+
+        public async Task<string> GetTokenPrice(string id)
+        {
+            if ((await _pingClient.GetPingAsync()).GeckoSays == string.Empty)
+                return null;
+
+
+            var simplePrice = await _coinsClient.GetAllCoinDataWithId("bitcoin");
+            var usdPrice = simplePrice.MarketData.CurrentPrice["usd"];
+            var tt = simplePrice;
+
+            return "";
         }
 
         private List<CryptoToken> ParseCryptoToken(Price? price)

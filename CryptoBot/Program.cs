@@ -1,9 +1,12 @@
-﻿using CryptoBot;
+﻿using CoinGecko.Clients;
+using CoinGecko.Interfaces;
+using CryptoBot;
 using CryptoBot.Crypto.Services;
 using CryptoBot.DAL;
 using CryptoBot.Handlers;
 using CryptoBot.Models;
 using CryptoBot.Settings;
+using CryptoBot.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,8 +42,16 @@ await Host.CreateDefaultBuilder(args)
         services.AddHostedService<TelegramHostedService>();
         services.AddHostedService<TokenSendHostedService>();
 
+        var http = new HttpClient();
+        var serializer = JsonSerializer.GetSerializerSettings();
+        services.AddSingleton<ICoinsClient>(new CoinsClient(http, serializer));
+        services.AddSingleton<IPingClient>(new PingClient(http, serializer));
+        services.AddSingleton<ISimpleClient>(new SimpleClient(http, serializer));
+
         services.AddHttpClient();
         services.AddMemoryCache();
     })
     .Build()
     .RunAsync();
+
+public partial class Program { }

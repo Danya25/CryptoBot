@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoBot", "CryptoBot\CryptoBot.csproj", "{EF93FF7D-BE70-4B89-B4FA-0C4E8B8EEF71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoBot", "CryptoBot\CryptoBot.csproj", "{EF93FF7D-BE70-4B89-B4FA-0C4E8B8EEF71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoBot.DAL", "CryptoBot.DAL\CryptoBot.DAL.csproj", "{070DA07B-0496-4059-BDE4-A09C00BB2311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoBot.DAL", "CryptoBot.DAL\CryptoBot.DAL.csproj", "{070DA07B-0496-4059-BDE4-A09C00BB2311}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoBot.Tests", "CryptoBot.Tests\CryptoBot.Tests.csproj", "{32FF0890-F157-41D6-949F-E444CD2FE438}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{070DA07B-0496-4059-BDE4-A09C00BB2311}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{070DA07B-0496-4059-BDE4-A09C00BB2311}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{070DA07B-0496-4059-BDE4-A09C00BB2311}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32FF0890-F157-41D6-949F-E444CD2FE438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32FF0890-F157-41D6-949F-E444CD2FE438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32FF0890-F157-41D6-949F-E444CD2FE438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32FF0890-F157-41D6-949F-E444CD2FE438}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

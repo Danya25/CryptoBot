@@ -1,4 +1,5 @@
 ﻿using CryptoBot.Constants;
+using CryptoBot.Crypto.Services;
 using CryptoBot.DAL;
 using CryptoBot.DAL.Extensions;
 using CryptoBot.DAL.Models;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CryptoBot.Handlers
 {
@@ -17,14 +19,17 @@ namespace CryptoBot.Handlers
         private readonly IDbContextFactory<ApplicationContext> _dbContextFactory;
         private readonly ITelegramBotClient _botClient;
         private readonly IOptions<TokenSendingLimit> _options;
+        private readonly ICryptoCurrencyService _cryptoCurrencyService;
         public UpdateHandler(
-            IDbContextFactory<ApplicationContext> dbContextFactory, 
-            ITelegramBotClient botClient, 
-            IOptions<TokenSendingLimit> options)
+            IDbContextFactory<ApplicationContext> dbContextFactory,
+            ITelegramBotClient botClient,
+            IOptions<TokenSendingLimit> options, 
+            ICryptoCurrencyService cryptoCurrencyService)
         {
             _botClient = botClient;
             _dbContextFactory = dbContextFactory;
             _options = options;
+            _cryptoCurrencyService = cryptoCurrencyService;
         }
 
         public async Task HandleMessage(Message? m)
@@ -37,8 +42,28 @@ namespace CryptoBot.Handlers
                 "/start" => HandleStartMessage(m, dbContext),
                 "/time" => HandleTimeMessage(m, dbContext),
                 "/currency" => HandleCurrencyMessage(m, dbContext),
+                "/find" => HandleFindTokenMessage(m, dbContext),
                 _ => DefaultTextHandler(m),
             });
+        }
+
+        private async Task HandleFindTokenMessage(Message m, ApplicationContext dbContext)
+        {
+            var text = m.Text.Split(' ');
+            var userId = m.From.Id;
+
+            if (text.Length != 2)
+            {
+                await _botClient.SendTextMessageAsync(userId, TextConstant.CommandWasNotRecognized);
+                return;
+            }
+
+            var test = await _cryptoCurrencyService.GetTokenPrice("bitcoin");
+
+            var tokenId = text[1];
+
+
+
         }
 
         private async Task HandleCurrencyMessage(Message m, ApplicationContext dbContext)
@@ -64,7 +89,6 @@ namespace CryptoBot.Handlers
             info.Currency = value;
             await dbContext.SaveChangesAsync();
         }
-
         private async Task HandleStartMessage(Message? m, ApplicationContext dbContext)
         {
 
