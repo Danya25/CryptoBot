@@ -5,13 +5,9 @@ COPY ["CryptoBot/CryptoBot.csproj", "CryptoBot/"]
 COPY ["CryptoBot.DAL/CryptoBot.DAL.csproj", "CryptoBot.DAL/"]
 COPY ["CryptoBot.Tests/CryptoBot.Tests.csproj", "CryptoBot.Tests/"]
 
-
-WORKDIR /CryptoBot
-RUN dotnet restore
-WORKDIR /CryptoBot.DAL
-RUN dotnet restore
-WORKDIR /CryptoBot.Tests
-RUN dotnet restore
+RUN dotnet restore -p:RestoreUseSkipNonexistentTargets=false "CryptoBot/CryptoBot.csproj"
+RUN dotnet restore -p:RestoreUseSkipNonexistentTargets=false "CryptoBot.DAL/CryptoBot.DAL.csproj"
+RUN dotnet restore -p:RestoreUseSkipNonexistentTargets=false "CryptoBot.Tests/CryptoBot.Tests.csproj"
 
 COPY . .
 
