@@ -15,7 +15,7 @@ RUN dotnet build CryptoBot.csproj -c Release -o /app
 FROM build AS publish
 RUN dotnet publish CryptoBot.csproj -c Release -o /app/publish
 
-FROM base AS final
+FROM build AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
