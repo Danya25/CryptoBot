@@ -24,6 +24,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
+          file: ./CryptoBot/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cryptobot:latest
           cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/cryptobot:buildcache
