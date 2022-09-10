@@ -32,37 +32,49 @@ namespace CryptoBot.Handlers
             _cryptoCurrencyService = cryptoCurrencyService;
         }
 
-        public async Task HandleMessage(Message? m)
+        private async Task HandleMessage(Message? m)
         {
             var commands = m.Text.Split(' ');
-            using var dbContext = _dbContextFactory.CreateDbContext();
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
 
             await (commands[0] switch
             {
                 "/start" => HandleStartMessage(m, dbContext),
                 "/time" => HandleTimeMessage(m, dbContext),
                 "/currency" => HandleCurrencyMessage(m, dbContext),
-                "/find" => HandleFindTokenMessage(m, dbContext),
+                "/add" => HandleFindTokenMessage(m, dbContext),
                 _ => DefaultTextHandler(m),
             });
         }
 
         private async Task HandleFindTokenMessage(Message m, ApplicationContext dbContext)
         {
-            var text = m.Text.Split(' ');
+            var texts = m.Text.Split(' ');
             var userId = m.From.Id;
 
-            if (text.Length != 2)
+            if (texts.Length != 2)
             {
                 await _botClient.SendTextMessageAsync(userId, TextConstant.CommandWasNotRecognized);
                 return;
             }
+            var tokenId = texts[1];
+            var fullInfo = await _cryptoCurrencyService.GetTokenInfo(tokenId);
+            if (fullInfo is null)
+            {
+                await _botClient.SendTextMessageAsync(userId, "This token doesn't exist.");
+                return;
+            }
 
-            var test = await _cryptoCurrencyService.GetTokenPrice("bitcoin");
+            var user = dbContext.Users.Include(t=> t.PostInfo).FirstOrDefault(t => t.TelegramId == userId);
+            if(user is null)
+                return;
 
-            var tokenId = text[1];
+            // Check on existence active of current crypto set 
+            user.PostInfo.CryptoSet += $";{tokenId}";
 
+            await dbContext.SaveChangesAsync();
 
+            await _botClient.SendTextMessageAsync(userId, "Crypto active was added.");
 
         }
 
@@ -78,7 +90,7 @@ namespace CryptoBot.Handlers
             }
 
             var value = text[1];
-            var isValidCurrency = CryptoListConstant.CurrencyList.Contains(value);
+            var isValidCurrency = DefaultCryptoList.CurrencyList.Contains(value);
             if (!isValidCurrency)
             {
                 await _botClient.SendTextMessageAsync(userId, "Currency isn't valid");
@@ -133,7 +145,7 @@ namespace CryptoBot.Handlers
                 {
                     UserId = userId,
                     Timer = period,
-                    CryptoSet = string.Join(';', CryptoListConstant.CryptoList),
+                    CryptoSet = string.Join(';', DefaultCryptoList.CryptoList),
                 };
                 await dbContext.UserPostsInfo.AddAsync(userInfo);
             }

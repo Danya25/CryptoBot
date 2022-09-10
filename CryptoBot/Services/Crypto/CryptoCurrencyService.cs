@@ -1,4 +1,5 @@
 ﻿using CoinGecko.Clients;
+using CoinGecko.Entities.Response.Coins;
 using CoinGecko.Entities.Response.Simple;
 using CoinGecko.Interfaces;
 using CryptoBot.Models;
@@ -28,17 +29,14 @@ namespace CryptoBot.Crypto.Services
             return parsedPrice;
         }
 
-        public async Task<string> GetTokenPrice(string id)
+        public async Task<CoinFullDataById> GetTokenInfo(string id)
         {
             if ((await _pingClient.GetPingAsync()).GeckoSays == string.Empty)
                 return null;
+            
+            var simplePrice = await _coinsClient.GetAllCoinDataWithId(id);
 
-
-            var simplePrice = await _coinsClient.GetAllCoinDataWithId("bitcoin");
-            var usdPrice = simplePrice.MarketData.CurrentPrice["usd"];
-            var tt = simplePrice;
-
-            return "";
+            return simplePrice;
         }
 
         private List<CryptoToken> ParseCryptoToken(Price? price)

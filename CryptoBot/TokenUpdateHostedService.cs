@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
 using System.Text;
+using CryptoBot.Constants;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 
@@ -30,7 +31,7 @@ namespace CryptoBot
             while (!stoppingToken.IsCancellationRequested)
             {
                 using var dbContext = _factoryContext.CreateDbContext();
-                var result = await _cryptoCurrencyService.GetTokenPrice(CryptoListConstant.CryptoList, CryptoListConstant.CurrencyList);
+                var result = await _cryptoCurrencyService.GetTokenPrice(DefaultCryptoList.CryptoList, DefaultCryptoList.CurrencyList);
                 var sb = new StringBuilder();
 
                 foreach (var token in result)

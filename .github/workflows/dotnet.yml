@@ -31,5 +31,5 @@ jobs:
           file: ./CryptoBot/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cryptobot:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:buildcache,mode=max
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/cryptobot:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/cryptobot:buildcache,mode=max
