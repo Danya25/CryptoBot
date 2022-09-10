@@ -1,13 +1,13 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src
 
 COPY ["CryptoBot/CryptoBot.csproj", "CryptoBot/"]
 COPY ["CryptoBot.DAL/CryptoBot.DAL.csproj", "CryptoBot.DAL/"]
 COPY ["CryptoBot.Tests/CryptoBot.Tests.csproj", "CryptoBot.Tests/"]
 
-RUN dotnet restore -p:RestoreUseSkipNonexistentTargets=false "CryptoBot/CryptoBot.csproj"
-RUN dotnet restore -p:RestoreUseSkipNonexistentTargets=false "CryptoBot.DAL/CryptoBot.DAL.csproj"
-RUN dotnet restore -p:RestoreUseSkipNonexistentTargets=false "CryptoBot.Tests/CryptoBot.Tests.csproj"
+RUN dotnet restore "CryptoBot/CryptoBot.csproj"
+RUN dotnet restore "CryptoBot.DAL/CryptoBot.DAL.csproj"
+RUN dotnet restore "CryptoBot.Tests/CryptoBot.Tests.csproj"
 
 COPY . .
 
