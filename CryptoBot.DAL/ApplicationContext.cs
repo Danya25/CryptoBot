@@ -11,6 +11,7 @@ namespace CryptoBot.DAL
 
         public ApplicationContext(DbContextOptions<ApplicationContext> opts) : base(opts)
         {
+            Database.EnsureCreated();
         }
 
         public DbSet<User> Users { get; set; }
