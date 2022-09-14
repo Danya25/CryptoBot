@@ -26,6 +26,7 @@ FROM build AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-nanoserver-1903 AS migration
 WORKDIR /migration
 COPY --from=migration /app/migration .
 
