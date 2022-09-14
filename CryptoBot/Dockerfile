@@ -13,6 +13,7 @@ RUN dotnet restore "CryptoBot.MigrationApp/CryptoBot.MigrationApp.csproj"
 
 COPY . .
 
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-nanoserver-1903 AS migration
 WORKDIR "/src/CryptoBot.MigrationApp"
 RUN dotnet build "CryptoBot.MigrationApp.csproj" -c Release -o /app/migration
 
@@ -26,7 +27,7 @@ FROM build AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-nanoserver-1903 AS migration
+FROM base AS final
 WORKDIR /migration
 COPY --from=migration /app/migration .
 
