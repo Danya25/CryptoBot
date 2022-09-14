@@ -23,13 +23,13 @@ RUN dotnet build CryptoBot.csproj -c Release -o /app
 FROM build AS publish
 RUN dotnet publish CryptoBot.csproj -c Release -o /app/publish
 
-FROM build AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-
 FROM base AS final
 WORKDIR /migration
 COPY --from=migration /app/migration .
+
+FROM build AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 
 ENTRYPOINT ["dotnet", "CryptoBot.dll"]
 
