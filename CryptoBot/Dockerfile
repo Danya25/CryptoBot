@@ -26,5 +26,8 @@ FROM build AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+WORKDIR /migration
+COPY --from=migration /app/migration .
+
 ENTRYPOINT ["dotnet", "CryptoBot.dll"]
 
