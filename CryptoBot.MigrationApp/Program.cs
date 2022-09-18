@@ -9,9 +9,9 @@ Console.WriteLine("Migration tool is starting");
 
 if (args.Length != 1)
     throw new Exception("Connection string doesn't exist.");
-        
+
 var connectionString = args[0];
-        
+
 if (string.IsNullOrEmpty(connectionString))
     throw new Exception("Connection string is incorrect.");
         
