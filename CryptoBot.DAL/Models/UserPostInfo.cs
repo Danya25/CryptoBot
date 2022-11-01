@@ -14,17 +14,34 @@ namespace CryptoBot.DAL.Models
         public DateTime LastPostTime { get; set; }
 
         [NotMapped]
-        public string[] CryptoSetArray
+        public List<string> CryptoSetCollection
         {
             get
             {
-                return CryptoSet.Split(";");
-            }
-            set
-            {
-                CryptoSet = String.Join(";", value);
-                CryptoSetArray = value;
+                return CryptoSet.Split(";").ToList();
             }
         }
+
+        public bool RemoveCryptoAsset(string value)
+        {
+            var cryptoAssets = CryptoSet.Split(";").ToList();
+            var isDeleted = cryptoAssets.Remove(value);
+            if(!isDeleted)
+                return false;
+
+
+            CryptoSet = string.Join(";", cryptoAssets);
+            return true;
+        }
+       
+        public bool AddCryptoAsset(string value)
+        {
+            if (CryptoSetCollection.Contains(value))
+                return false;
+
+            CryptoSet = $"{CryptoSet};{value}";
+            return true;
+        }
+
     }
 }

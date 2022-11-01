@@ -45,4 +45,8 @@
     <ProjectReference Include="..\CryptoBot.DAL\CryptoBot.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
 </Project>

@@ -5,6 +5,7 @@ using CryptoBot.Crypto.Services;
 using CryptoBot.DAL;
 using CryptoBot.Handlers;
 using CryptoBot.Models;
+using CryptoBot.Services.PeriodValidator;
 using CryptoBot.Settings;
 using CryptoBot.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,7 @@ await Host.CreateDefaultBuilder(args)
         services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(botOptions.Token));
         services.AddSingleton<IUpdateHandler, UpdateHandler>();
         services.AddSingleton<ICryptoCurrencyService, CryptoCurrencyService>();
+        services.AddSingleton<IPeriodValidator, PeriodValidator>();
 
         services.AddHostedService<TokenUpdateHostedService>();
         services.AddHostedService<TelegramHostedService>();

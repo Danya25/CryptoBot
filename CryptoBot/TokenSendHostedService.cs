@@ -36,7 +36,7 @@ namespace CryptoBot
 
                 foreach (var user in users)
                 {
-                    var userTokens = user.PostInfo.CryptoSetArray;
+                    var userTokens = user.PostInfo.CryptoSetCollection;
                     foreach (var userToken in userTokens)
                     {
                         var cachedToken = _memoryCache.Get<CryptoToken>(userToken.ToUpper());

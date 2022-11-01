@@ -1,16 +1,17 @@
 ﻿using CryptoBot.Settings;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CryptoBot.Validators
+namespace CryptoBot.Services.PeriodValidator
 {
-    public static class PeriodValidator
+    public class PeriodValidator : IPeriodValidator
     {
-        public static bool TryValidate(string value, IOptions<TokenSendingLimit> options, out int validatedValue)
+        public  IOptions<TokenSendingLimit> _options;
+        public PeriodValidator(IOptions<TokenSendingLimit> options)
+        {
+            _options = options;
+        }
+
+        public bool TryValidate(string value, out int validatedValue)
         {
             validatedValue = 0;
 
@@ -20,7 +21,7 @@ namespace CryptoBot.Validators
                 return false;
             }
 
-            var isValidPeriod = period > options.Value.Min && period <= options.Value.Max;
+            var isValidPeriod = period > _options.Value.Min && period <= _options.Value.Max;
             if (!isValidPeriod)
             {
                 return false;
