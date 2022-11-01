@@ -6,13 +6,15 @@ services:
     build:
       context: .
       dockerfile: CryptoBot/Dockerfile 
-    ports:
-      - "8000:80"
+    networks:
+      - host_network
     depends_on:
       - db
+    environment:
+      - DOTNET_ENVIRONMENT='Local'
 
   db:
-    image: microsoft/mssql-server-linux:latest
+    image: mcr.microsoft.com/mssql/server
     environment:
       SA_PASSWORD: "TestPassword123!"
       ACCEPT_EULA: "Y"
@@ -28,4 +30,4 @@ networks:
 
 volumes:
   mssql_volume:
-    name: 'myblog_mssql_volume'
+    name: 'cryptobot_mssql_volume'

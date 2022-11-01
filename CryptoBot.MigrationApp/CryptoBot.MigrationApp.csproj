@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CryptoBot.DAL\CryptoBot.DAL.csproj" />
+      <ProjectReference Include="..\CryptoBot\CryptoBot.csproj" />
     </ItemGroup>
 
 </Project>

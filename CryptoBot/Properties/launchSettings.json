@@ -3,7 +3,7 @@
     "CryptoBot": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Server"
+        "DOTNET_ENVIRONMENT": "Local"
       }
     }
   }

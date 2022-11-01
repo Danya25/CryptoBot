@@ -1,6 +1,5 @@
 ﻿using CoinGecko.Clients;
 using CoinGecko.Interfaces;
-using CryptoBot;
 using CryptoBot.Crypto.Services;
 using CryptoBot.DAL;
 using CryptoBot.Handlers;
@@ -15,45 +14,54 @@ using Microsoft.Extensions.Hosting;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
 
-await Host.CreateDefaultBuilder(args)
-    .ConfigureServices((hostcontext, services) =>
+namespace CryptoBot
+{
+    public class Program
     {
-        //TODO: Rework configuration
-        var botOptions = new BotOptions();
-        var sendingLimits = new TokenSendingLimit();
-        hostcontext.Configuration.GetSection(nameof(BotOptions)).Bind(botOptions);
-        hostcontext.Configuration.GetSection(nameof(TokenSendingLimit)).Bind(sendingLimits);
-        services.Configure<BotOptions>(t =>
+        private static async Task Main(string[] args)
         {
-            t.Token = botOptions.Token;
-        });
-        services.Configure<TokenSendingLimit>(t =>
-        {
-            t.Min = sendingLimits.Min;
-            t.Max = sendingLimits.Max;
-        });
+            await Host.CreateDefaultBuilder(args)
+               .ConfigureServices((hostcontext, services) =>
+               {
+                   //TODO: Rework configuration
+                   var botOptions = new BotOptions();
+                   var sendingLimits = new TokenSendingLimit();
+                   hostcontext.Configuration.GetSection(nameof(BotOptions)).Bind(botOptions);
+                   hostcontext.Configuration.GetSection(nameof(TokenSendingLimit)).Bind(sendingLimits);
+                   services.Configure<BotOptions>(t =>
+                   {
+                       t.Token = botOptions.Token;
+                   });
+                   services.Configure<TokenSendingLimit>(t =>
+                   {
+                       t.Min = sendingLimits.Min;
+                       t.Max = sendingLimits.Max;
+                   });
+                   var tt = hostcontext.Configuration.GetConnectionString("DefaultConnection");
+                   services.AddDbContextFactory<ApplicationContext, ApplicationDbContextFactory>(options => options.UseSqlServer(hostcontext.Configuration.GetConnectionString("DefaultConnection")));
 
-        services.AddDbContextFactory<ApplicationContext, ApplicationDbContextFactory>(options => options.UseSqlServer(hostcontext.Configuration.GetConnectionString("DefaultConnection")));
+                   services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(botOptions.Token));
+                   services.AddSingleton<IUpdateHandler, UpdateHandler>();
+                   services.AddSingleton<ICryptoCurrencyService, CryptoCurrencyService>();
+                   services.AddSingleton<IPeriodValidator, PeriodValidator>();
 
-        services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(botOptions.Token));
-        services.AddSingleton<IUpdateHandler, UpdateHandler>();
-        services.AddSingleton<ICryptoCurrencyService, CryptoCurrencyService>();
-        services.AddSingleton<IPeriodValidator, PeriodValidator>();
+                   services.AddHostedService<TokenUpdateHostedService>();
+                   services.AddHostedService<TelegramHostedService>();
+                   services.AddHostedService<TokenSendHostedService>();
 
-        services.AddHostedService<TokenUpdateHostedService>();
-        services.AddHostedService<TelegramHostedService>();
-        services.AddHostedService<TokenSendHostedService>();
+                   var http = new HttpClient();
+                   var serializer = JsonSerializer.GetSerializerSettings();
+                   services.AddSingleton<ICoinsClient>(new CoinsClient(http, serializer));
+                   services.AddSingleton<IPingClient>(new PingClient(http, serializer));
+                   services.AddSingleton<ISimpleClient>(new SimpleClient(http, serializer));
 
-        var http = new HttpClient();
-        var serializer = JsonSerializer.GetSerializerSettings();
-        services.AddSingleton<ICoinsClient>(new CoinsClient(http, serializer));
-        services.AddSingleton<IPingClient>(new PingClient(http, serializer));
-        services.AddSingleton<ISimpleClient>(new SimpleClient(http, serializer));
+                   services.AddHttpClient();
+                   services.AddMemoryCache();
+               })
+               .Build()
+               .RunAsync();
+        }
+    }
+}
 
-        services.AddHttpClient();
-        services.AddMemoryCache();
-    })
-    .Build()
-    .RunAsync();
 
-public partial class Program { }

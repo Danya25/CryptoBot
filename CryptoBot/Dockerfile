@@ -4,6 +4,7 @@ WORKDIR /src
 COPY ["CryptoBot/CryptoBot.csproj", "CryptoBot/"]
 COPY ["CryptoBot.DAL/CryptoBot.DAL.csproj", "CryptoBot.DAL/"]
 COPY ["CryptoBot.Tests/CryptoBot.Tests.csproj", "CryptoBot.Tests/"]
+COPY ["CryptoBot.MigrationApp/CryptoBot.MigrationApp.csproj", "CryptoBot.MigrationApp/"]
 
 RUN dotnet restore "CryptoBot/CryptoBot.csproj"
 RUN dotnet restore "CryptoBot.DAL/CryptoBot.DAL.csproj"
@@ -22,7 +23,7 @@ WORKDIR /src
 COPY . .
 RUN dotnet restore "CryptoBot.MigrationApp/CryptoBot.MigrationApp.csproj"
 COPY . .
-WORKDIR "/src/"
+WORKDIR "/src/CryptoBot.MigrationApp"
 RUN dotnet build "CryptoBot.MigrationApp.csproj" -c Release -o /app/migration
 
 FROM build AS final
