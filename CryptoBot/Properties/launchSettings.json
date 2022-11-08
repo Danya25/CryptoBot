@@ -3,7 +3,7 @@
     "CryptoBot": {
       "commandName": "Project",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Local"
+        "DOTNET_ENVIRONMENT": ""
       }
     }
   }

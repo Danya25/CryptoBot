@@ -1,37 +1,45 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
-WORKDIR /src
 
+WORKDIR /docker
+COPY --chmod=+x ["docker/docker-entrypoint.sh", "docker-entrypoint.sh"]
+
+WORKDIR /src
 COPY ["CryptoBot/CryptoBot.csproj", "CryptoBot/"]
 COPY ["CryptoBot.DAL/CryptoBot.DAL.csproj", "CryptoBot.DAL/"]
-COPY ["CryptoBot.Tests/CryptoBot.Tests.csproj", "CryptoBot.Tests/"]
 COPY ["CryptoBot.MigrationApp/CryptoBot.MigrationApp.csproj", "CryptoBot.MigrationApp/"]
 
 RUN dotnet restore "CryptoBot/CryptoBot.csproj"
 RUN dotnet restore "CryptoBot.DAL/CryptoBot.DAL.csproj"
-RUN dotnet restore "CryptoBot.Tests/CryptoBot.Tests.csproj"
+RUN dotnet restore "CryptoBot.MigrationApp/CryptoBot.MigrationApp.csproj"
 
 COPY . .
 
+
+FROM build AS build-bot
 WORKDIR "/src/CryptoBot"
 RUN dotnet build CryptoBot.csproj -c Release -o /app
 
-FROM build AS publish
+
+FROM build AS build-migrationapp
+WORKDIR "/src/CryptoBot.MigrationApp"
+RUN dotnet build CryptoBot.MigrationApp.csproj -c Release -o /migration
+
+
+FROM build-bot AS publish-bot
 RUN dotnet publish CryptoBot.csproj -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS migration
-WORKDIR /src
-COPY . .
-RUN dotnet restore "CryptoBot.MigrationApp/CryptoBot.MigrationApp.csproj"
-COPY . .
-WORKDIR "/src/CryptoBot.MigrationApp"
-RUN dotnet build "CryptoBot.MigrationApp.csproj" -c Release -o /app/migration
+
+FROM build-migrationapp AS publish-migrationapp
+RUN dotnet publish CryptoBot.MigrationApp.csproj -c Release -o /migration/publish
+
 
 FROM build AS final
-WORKDIR /migration
-COPY --from=migration /app/migration .
-
-FROM build AS final
+COPY --from=build /docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish-bot /app/publish .
+WORKDIR /migration
+COPY --from=build "/src/CryptoBot.DAL" .
 
+
+WORKDIR /app
 ENTRYPOINT ["dotnet", "CryptoBot.dll"]

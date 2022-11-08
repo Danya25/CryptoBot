@@ -11,22 +11,26 @@ services:
     depends_on:
       - db
     environment:
-      - DOTNET_ENVIRONMENT='Local'
+      - DOTNET_ENVIRONMENT=Local
+      - ASPNETCORE_ENVIRONMENT=Local
 
   db:
     image: mcr.microsoft.com/mssql/server
+    container_name: db
+    hostname: db
     environment:
-      SA_PASSWORD: "TestPassword123!"
+      MSSQL_SA_PASSWORD: VeryStron!!!!gg231Passo123#@2
       ACCEPT_EULA: "Y"
     networks:
       - host_network
     volumes:
       - mssql_volume:/var/opt/mssql
+    ports:
+      - "1433:1433"
   
 networks:
   host_network:
     name: 'host_network'
-    driver: bridge
 
 volumes:
   mssql_volume:

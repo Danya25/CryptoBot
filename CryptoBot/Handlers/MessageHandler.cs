@@ -17,6 +17,7 @@ namespace CryptoBot.Handlers
         private readonly ITelegramBotClient _botClient;
         private readonly ICryptoCurrencyService _cryptoCurrencyService;
         private readonly IPeriodValidator _periodValidator;
+
         public UpdateHandler(
             IDbContextFactory<ApplicationContext> dbContextFactory,
             ITelegramBotClient botClient,
@@ -54,6 +55,7 @@ namespace CryptoBot.Handlers
 
         private async Task<Result<string>> HandleRemoveToken(Message m, ApplicationContext dbContext)
         {
+            // TODO: Сделать отдельный класс с конструктором (Message m)
             var texts = m.Text.Split(' ');
             var userId = m.From.Id;
             
