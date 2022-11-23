@@ -9,7 +9,7 @@ namespace CryptoBot.DAL.Models
         public long UserId { get; set; }
         public User User { get; set; }
         public int Timer { get; set; }
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
         public string CryptoSet { get; set; }
         public DateTime LastPostTime { get; set; }
 

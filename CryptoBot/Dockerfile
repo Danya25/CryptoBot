@@ -1,8 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 
-WORKDIR /docker
-COPY --chmod=+x ["docker/docker-entrypoint.sh", "docker-entrypoint.sh"]
-
 WORKDIR /src
 COPY ["CryptoBot/CryptoBot.csproj", "CryptoBot/"]
 COPY ["CryptoBot.DAL/CryptoBot.DAL.csproj", "CryptoBot.DAL/"]
@@ -34,7 +31,6 @@ RUN dotnet publish CryptoBot.MigrationApp.csproj -c Release -o /migration/publis
 
 
 FROM build AS final
-COPY --from=build /docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 WORKDIR /app
 COPY --from=publish-bot /app/publish .
 WORKDIR /migration

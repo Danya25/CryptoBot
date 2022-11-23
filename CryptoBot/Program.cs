@@ -37,8 +37,7 @@ namespace CryptoBot
                         t.Min = sendingLimits.Min;
                         t.Max = sendingLimits.Max;
                     });
-                    var tt = hostcontext.Configuration.GetConnectionString("DefaultConnection");
-                    services.AddDbContextFactory<ApplicationContext, ApplicationDbContextFactory>(options => options.UseSqlServer(hostcontext.Configuration.GetConnectionString("DefaultConnection")));
+                    services.AddDbContextFactory<ApplicationContext, ApplicationDbContextFactory>(options => options.UseNpgsql(hostcontext.Configuration.GetConnectionString("DefaultConnection")));
 
                     services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(botOptions.Token));
                     services.AddSingleton<IUpdateHandler, UpdateHandler>();

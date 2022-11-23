@@ -12,7 +12,7 @@ namespace CryptoBot.DAL.Migrations
             migrationBuilder.AddColumn<DateTime>(
                 name: "LastPostTime",
                 table: "UserPostsInfo",
-                type: "datetime2",
+                type: "timestamp",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
         }

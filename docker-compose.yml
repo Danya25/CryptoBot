@@ -15,16 +15,15 @@ services:
       - ASPNETCORE_ENVIRONMENT=Local
 
   db:
-    image: mcr.microsoft.com/mssql/server
+    image: postgres:latest
     container_name: db
     hostname: db
     environment:
-      MSSQL_SA_PASSWORD: VeryStron!!!!gg231Passo123#@2
-      ACCEPT_EULA: "Y"
+      POSTGRES_PASSWORD: Qwerty123
     networks:
       - host_network
     volumes:
-      - mssql_volume:/var/opt/mssql
+      - postgresql_volume:/var/lib/postgresql/data
     ports:
       - "1433:1433"
   
@@ -33,5 +32,5 @@ networks:
     name: 'host_network'
 
 volumes:
-  mssql_volume:
-    name: 'cryptobot_mssql_volume'
+  postgresql_volume:
+    name: 'cryptobot_postgresql_volume'

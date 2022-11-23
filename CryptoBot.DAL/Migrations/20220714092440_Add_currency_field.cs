@@ -11,7 +11,7 @@ namespace CryptoBot.DAL.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Currency",
                 table: "UserPostsInfo",
-                type: "nvarchar(max)",
+                type: "varchar(1024)",
                 nullable: false,
                 defaultValue: "");
         }

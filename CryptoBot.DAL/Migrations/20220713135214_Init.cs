@@ -13,7 +13,7 @@ namespace CryptoBot.DAL.Migrations
                 columns: table => new
                 {
                     TelegramId = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "varchar(1024)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,7 +26,7 @@ namespace CryptoBot.DAL.Migrations
                 {
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     Timer = table.Column<int>(type: "int", nullable: false),
-                    CryptoSet = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CryptoSet = table.Column<string>(type: "varchar(2048)", nullable: false)
                 },
                 constraints: table =>
                 {

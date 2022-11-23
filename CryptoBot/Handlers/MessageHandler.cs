@@ -143,7 +143,7 @@ namespace CryptoBot.Handlers
             await dbContext.SaveChangesAsync();
 
             await _botClient.SendTextMessageAsync(userId, "Welcome to the Crypto Bot.");
-            await _botClient.SendTextMessageAsync(userId, "For set a certain time. Write /time 100 (in seconds max 864000 seconds)");
+            await _botClient.SendTextMessageAsync(userId, "For set a certain time. Write /time 500 (in seconds max 864000 seconds)");
 
             return string.Empty.ToSuccessMethodResult();
         }
