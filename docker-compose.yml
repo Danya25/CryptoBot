@@ -5,8 +5,8 @@ services:
   web:
     image: ratatata/cryptobot:latest
     build:
-      context: .
-      dockerfile: CryptoBot/Dockerfile 
+      context: CryptoBot
+      dockerfile: Dockerfile 
       image: ratatata/cryptobot
     networks:
       - host_network
