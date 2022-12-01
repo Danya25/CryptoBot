@@ -23,26 +23,21 @@ namespace CryptoBot
             var hostBuild = Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostcontext, services) =>
                 {
-                    //TODO: Rework configuration
-                    var botOptions = new BotOptions();
-                    var sendingLimits = new TokenSendingLimit();
-                    hostcontext.Configuration.GetSection(nameof(BotOptions)).Bind(botOptions);
-                    hostcontext.Configuration.GetSection(nameof(TokenSendingLimit)).Bind(sendingLimits);
-                    services.Configure<BotOptions>(t =>
-                    {
-                        t.Token = botOptions.Token;
-                    });
-                    services.Configure<TokenSendingLimit>(t =>
-                    {
-                        t.Min = sendingLimits.Min;
-                        t.Max = sendingLimits.Max;
-                    });
-                    services.AddDbContextFactory<ApplicationContext, ApplicationDbContextFactory>(options => options.UseNpgsql(hostcontext.Configuration.GetConnectionString("DefaultConnection")));
+                    var configuration = hostcontext.Configuration;
 
-                    services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(botOptions.Token));
+                    Console.WriteLine(configuration.GetConnectionString("DefaultConnection"));
+
+                    services.Configure<BotOptions>(configuration.GetSection(nameof(BotOptions)));
+                    services.Configure<TokenSendingLimit>(configuration.GetSection(nameof(TokenSendingLimit)));
+
+                    services.AddDbContextFactory<ApplicationContext, ApplicationDbContextFactory>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+                    services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(configuration.GetSection($"{nameof(BotOptions)}:Token").Value));
                     services.AddSingleton<IUpdateHandler, UpdateHandler>();
                     services.AddSingleton<ICryptoCurrencyService, CryptoCurrencyService>();
                     services.AddSingleton<IPeriodValidator, PeriodValidator>();
+
+                    services.Configure<HostOptions>(t => t.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore);
 
                     services.AddHostedService<TokenUpdateHostedService>();
                     services.AddHostedService<TelegramHostedService>();
@@ -59,6 +54,7 @@ namespace CryptoBot
                 })
                 .Build();
             Console.WriteLine(hostBuild.Services.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection"));
+
             using (var context = hostBuild.Services.GetRequiredService<ApplicationContext>())
             {
                 if ((await context.Database.GetPendingMigrationsAsync()).Any())

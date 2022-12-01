@@ -26,40 +26,55 @@ namespace CryptoBot
             //var myId = "310018521";
             var sb = new StringBuilder();
 
-            while (!stoppingToken.IsCancellationRequested)
+            try
             {
-                using var dbContext = _factoryContext.CreateDbContext();
-                var users = dbContext.Users
-                .Include(t => t.PostInfo)
-                .Where(t => t.PostInfo.LastPostTime.AddSeconds(t.PostInfo.Timer) <= DateTime.UtcNow)
-                .ToList();
-
-                foreach (var user in users)
+                while (!stoppingToken.IsCancellationRequested)
                 {
-                    var userTokens = user.PostInfo.CryptoSetCollection;
-                    foreach (var userToken in userTokens)
+                    using var dbContext = _factoryContext.CreateDbContext();
+                    var users = dbContext.Users
+                    .Include(t => t.PostInfo)
+                    .Where(t => t.PostInfo.LastPostTime.AddSeconds(t.PostInfo.Timer) <= DateTime.UtcNow)
+                    .ToList();
+
+                    foreach (var user in users)
                     {
-                        var cachedToken = _memoryCache.Get<CryptoToken>(userToken.ToUpper());
-                        if (cachedToken is null)
+                        var userTokens = user.PostInfo.CryptoSetCollection;
+                        foreach (var userToken in userTokens)
+                        {
+                            var cachedToken = _memoryCache.Get<CryptoToken>(userToken.ToUpper());
+                            if (cachedToken is null)
+                                continue;
+
+                            var text = $"<b>{cachedToken.Name}</b>: {cachedToken.UsdPrice}$ \n";
+                            var separator = string.Join("", text.Select(t => "-").ToArray()) + "\n";
+                            sb.Append(text);
+                            sb.Append(separator);
+                        }
+
+                        user.PostInfo.LastPostTime = DateTime.UtcNow;
+
+                        if (sb.Length == 0)
                             continue;
 
-                        var text = $"<b>{cachedToken.Name}</b>: {cachedToken.UsdPrice}$ \n";
-                        var separator = string.Join("", text.Select(t => "-").ToArray()) + "\n";
-                        sb.Append(text);
-                        sb.Append(separator);
+                        await _botClient.SendTextMessageAsync(user.TelegramId, sb.ToString(), ParseMode.Html);
+                        sb.Clear();
+                    }
+                    if (users.Count > 0)
+                    {
+                        await dbContext.SaveChangesAsync();
                     }
 
-                    user.PostInfo.LastPostTime = DateTime.UtcNow;
-
-                    await _botClient.SendTextMessageAsync(user.TelegramId, sb.ToString(), ParseMode.Html);
-                    sb.Clear();
-                }
-                if(users.Count > 0)
-                {
-                    await dbContext.SaveChangesAsync();
+                    await Task.Delay(10_000);
                 }
 
-                await Task.Delay(10_000);
+            }
+            catch (Exception ex) when (stoppingToken.IsCancellationRequested)
+            {
+                Console.WriteLine($"Task was stopped \r\n{ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
             }
         }
     }

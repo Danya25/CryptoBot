@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoBot", "CryptoBot\Cryp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoBot.DAL", "CryptoBot.DAL\CryptoBot.DAL.csproj", "{070DA07B-0496-4059-BDE4-A09C00BB2311}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoBot.Tests", "CryptoBot.Tests\CryptoBot.Tests.csproj", "{32FF0890-F157-41D6-949F-E444CD2FE438}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoBot.Tests", "CryptoBot.Tests\CryptoBot.Tests.csproj", "{32FF0890-F157-41D6-949F-E444CD2FE438}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoBot.MigrationApp", "CryptoBot.MigrationApp\CryptoBot.MigrationApp.csproj", "{184BB82B-820B-4DBD-997E-BCED00132896}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoBot.MigrationApp", "CryptoBot.MigrationApp\CryptoBot.MigrationApp.csproj", "{184BB82B-820B-4DBD-997E-BCED00132896}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramBotLogger", "TelegramBotLogger\TelegramBotLogger.csproj", "{511AC050-F0BB-447F-B2DD-38FE49613F4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{184BB82B-820B-4DBD-997E-BCED00132896}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{184BB82B-820B-4DBD-997E-BCED00132896}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{184BB82B-820B-4DBD-997E-BCED00132896}.Release|Any CPU.Build.0 = Release|Any CPU
+		{511AC050-F0BB-447F-B2DD-38FE49613F4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{511AC050-F0BB-447F-B2DD-38FE49613F4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{511AC050-F0BB-447F-B2DD-38FE49613F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{511AC050-F0BB-447F-B2DD-38FE49613F4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

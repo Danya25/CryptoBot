@@ -20,8 +20,7 @@ namespace CryptoBot.Crypto.Services
         }
         public async Task<List<CryptoToken>> GetTokenPrice(string[] tokensId, string[] currencies)
         {
-            if ((await _pingClient.GetPingAsync()).GeckoSays == string.Empty)
-                return new List<CryptoToken>(0);
+            await GetPingAsync();
 
             var simplePrice = await _simpleClient.GetSimplePrice(tokensId, currencies);
             var parsedPrice = ParseCryptoToken(simplePrice);
@@ -31,14 +30,19 @@ namespace CryptoBot.Crypto.Services
 
         public async Task<CoinFullDataById> GetTokenInfo(string id)
         {
-            if ((await _pingClient.GetPingAsync()).GeckoSays == string.Empty)
-                return null;
-            
+            await GetPingAsync();
+
             var simplePrice = await _coinsClient.GetAllCoinDataWithId(id);
 
             return simplePrice;
         }
 
+
+        private async Task GetPingAsync()
+        {
+            if ((await _pingClient.GetPingAsync()).GeckoSays == string.Empty)
+                return;
+        }
         private List<CryptoToken> ParseCryptoToken(Price? price)
         {
             var prices = new List<CryptoToken>();
