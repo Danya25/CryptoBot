@@ -3,9 +3,11 @@ version: '3.9'
 services:
   
   web:
+    image: ratatata/cryptobot:latest
     build:
       context: .
       dockerfile: CryptoBot/Dockerfile 
+      image: ratatata/cryptobot
     networks:
       - host_network
     depends_on:
