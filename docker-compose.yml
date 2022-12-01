@@ -7,7 +7,6 @@ services:
     build:
       context: CryptoBot
       dockerfile: Dockerfile 
-      image: ratatata/cryptobot
     networks:
       - host_network
     depends_on:
