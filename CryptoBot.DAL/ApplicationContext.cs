@@ -13,11 +13,13 @@ namespace CryptoBot.DAL
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserPostInfo> UserPostsInfo { get; set; }
+        public DbSet<Token> Tokens { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             new UserConfiguration().Configure(builder.Entity<User>());
+            builder.ApplyConfiguration(new TokenConfiguration());
         }
 
     }

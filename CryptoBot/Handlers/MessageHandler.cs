@@ -6,6 +6,7 @@ using CryptoBot.DAL.Models;
 using CryptoBot.Services.PeriodValidator;
 using CryptoBot.Utils;
 using Microsoft.EntityFrameworkCore;
+using OpenAI.GPT3.Interfaces;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -18,16 +19,21 @@ namespace CryptoBot.Handlers
         private readonly ICryptoCurrencyService _cryptoCurrencyService;
         private readonly IPeriodValidator _periodValidator;
 
+        private readonly IOpenAIService _openAI;
+
         public UpdateHandler(
             IDbContextFactory<ApplicationContext> dbContextFactory,
             ITelegramBotClient botClient,
             ICryptoCurrencyService cryptoCurrencyService,
-            IPeriodValidator periodValidator)
+            IPeriodValidator periodValidator,
+            IOpenAIService openAI)
         {
             _botClient = botClient;
             _dbContextFactory = dbContextFactory;
             _cryptoCurrencyService = cryptoCurrencyService;
             _periodValidator = periodValidator;
+            _openAI = openAI;
+
         }
 
         private async Task HandleMessage(Message? m)
@@ -58,7 +64,7 @@ namespace CryptoBot.Handlers
             // TODO: Сделать отдельный класс с конструктором (Message m)
             var texts = m.Text.Split(' ');
             var userId = m.From.Id;
-            
+
             if (texts.Length != 2)
             {
                 return TextConstant.CommandWasNotRecognized.ToErrorMethodResult();

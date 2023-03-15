@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoBot.Tests", "CryptoBo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoBot.MigrationApp", "CryptoBot.MigrationApp\CryptoBot.MigrationApp.csproj", "{184BB82B-820B-4DBD-997E-BCED00132896}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramBotLogger", "TelegramBotLogger\TelegramBotLogger.csproj", "{511AC050-F0BB-447F-B2DD-38FE49613F4F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoBot.TokenUpdater", "CryptoBot.TokenUpdater\CryptoBot.TokenUpdater.csproj", "{797E5308-AC16-49C2-9E1C-1F2F16C008FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{184BB82B-820B-4DBD-997E-BCED00132896}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{184BB82B-820B-4DBD-997E-BCED00132896}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{184BB82B-820B-4DBD-997E-BCED00132896}.Release|Any CPU.Build.0 = Release|Any CPU
-		{511AC050-F0BB-447F-B2DD-38FE49613F4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{511AC050-F0BB-447F-B2DD-38FE49613F4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{511AC050-F0BB-447F-B2DD-38FE49613F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{511AC050-F0BB-447F-B2DD-38FE49613F4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{797E5308-AC16-49C2-9E1C-1F2F16C008FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{797E5308-AC16-49C2-9E1C-1F2F16C008FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{797E5308-AC16-49C2-9E1C-1F2F16C008FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{797E5308-AC16-49C2-9E1C-1F2F16C008FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

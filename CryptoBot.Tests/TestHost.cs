@@ -43,15 +43,15 @@ namespace CryptoBot.Tests
                     services.AddSingleton<IUpdateHandler, UpdateHandler>();
                     services.AddSingleton<ICryptoCurrencyService, CryptoCurrencyService>();
 
-                    services.AddHostedService<TokenUpdateHostedService>();
                     services.AddHostedService<TelegramHostedService>();
-                    services.AddHostedService<TokenSendHostedService>();
 
                     var http = new HttpClient();
                     var serializer = JsonSerializer.GetSerializerSettings();
                     services.AddSingleton<ICoinsClient>(new CoinsClient(http, serializer));
                     services.AddSingleton<IPingClient>(new PingClient(http, serializer));
                     services.AddSingleton<ISimpleClient>(new SimpleClient(http, serializer));
+                    services.AddSingleton<TokenUpdater>();
+                    services.AddSingleton<TokenSender>();
 
                     services.AddHttpClient();
                     services.AddMemoryCache();

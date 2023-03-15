@@ -18,7 +18,7 @@ namespace CryptoBot.Handlers
             {
                 await (update.Type switch
                 {
-                    UpdateType.Message => HandleMessage(update.Message),
+                    UpdateType.Message => HandleMessageByAi(update.Message),
                     _ => Task.CompletedTask
                 });
             }
